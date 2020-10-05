@@ -72,3 +72,28 @@ form.addEventListener("submit", (e) => {
     searchSongs(searchTerm);
   }
 });
+
+//Get Lyrics BUTTON
+result.addEventListener("click", (e) => {
+  const clickedEl = e.target;
+
+  if (clickedEl.tagName === "BUTTON") {
+    const artist = clickedEl.getAttribute("data-artist");
+    const songTitle = clickedEl.getAttribute("data-songtitle");
+
+    getLyrics(artist, songTitle);
+  }
+});
+
+//Get Lyrics FUNCTION
+async function getLyrics(artist, songtitle) {
+  const res = await fetch(`${apiURL}/v1/${artist}/${songtitle}`);
+  const data = await res.json();
+
+  const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, "<br>");
+
+  result.innerHTML = `<h2><strong>${artist}</strong> - ${songtitle}</h2>
+  <span>${lyrics}</span>`;
+
+  more.innerHTML = "";
+}
